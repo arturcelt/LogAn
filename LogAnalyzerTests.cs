@@ -43,13 +43,53 @@ namespace LogAn.UnitTests
             Assert.False(result);
         }
 
+        [Test]
+        public void IsValidLogFileName_EmptyFileName_Throws()
+        {
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+
+            var exc = Assert.Throws<ArgumentException>(() => logAnalyzer.IsValidLogFileName(""));
+
+            StringAssert.Contains("należy podać nazwę pliku", exc.Message);
+        
+        }
+
+        //[Test]
+        //[Ignore("z tym testem jest problem")]
+        //public void IsValidLogFileName_ValidFile_ReturnsTrue()
+        //{
+        //    //--
+        //}
+
+        [Test]
+        [Category("szybkie testy")]
+        public void IsValidLogFileName_ValidFile_ReturnsTrue()
+        {
+
+        }
+
+        [Test]
+        public void IsValidLogFileName_WhenCalled_ChangesWasLastLogFileNameValid()
+        {
+            LogAnalyzer logAnalyer = MakeAnalyzer();
+
+            logAnalyer.IsValidLogFileName("badname.foo");
+
+            Assert.False(logAnalyer.WasLastLogFileNameValid);
+        }
+
+    
+
         [TearDown]
         public void TearDown()
         {
             m_Analyzer = null;
         }
 
-  
+        private LogAnalyzer MakeAnalyzer()
+        {
+            return new LogAnalyzer();
+        }
       
     }
 }
