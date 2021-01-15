@@ -12,10 +12,10 @@ namespace LogAn.UnitTests
         [Test]
         public void IsValidLogFileName_SupportedExteions_ReturnsTrue()
         {
+            ExtensionManagerFactory.SetManager(myFakeManager);
             LogAnalyzer log = new LogAnalyzer();
-            log.ExtensionManager = someFakeManagerCreatedErlier;
-           //-- ASERCJA LOGIKI PRZY ZAŁOŻENIU ŻE ROŻSZERZENIE JEST OBSŁUGIWANE
 
+            //-- ASERCJA PRZY ZAŁOŻENIU ŻE ROZSZERZENIE JEST OBSŁUGIWANE
         }
 
         
