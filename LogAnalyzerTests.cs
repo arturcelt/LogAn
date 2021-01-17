@@ -10,12 +10,15 @@ namespace LogAn.UnitTests
     public class LogAnalyzerTests
     {
         [Test]
-        public void IsValidLogFileName_SupportedExteions_ReturnsTrue()
+        public void overriderTest()
         {
-            ExtensionManagerFactory.SetManager(myFakeManager);
-            LogAnalyzer log = new LogAnalyzer();
+            FakeExtensionManager stub = new FakeExtensionManager();
+            stub.WillBeValid = true;
+            TestableLogAnalyzer logan = new TestableLogAnalyzer(stub);
 
-            //-- ASERCJA PRZY ZAŁOŻENIU ŻE ROZSZERZENIE JEST OBSŁUGIWANE
+            bool result = logan.IsValidLogFileName("file.ext");
+
+            Assert.True(result);
         }
 
         
@@ -32,5 +35,24 @@ namespace LogAn.UnitTests
             return WillBeValid;
         }
     }
+
+    class TestableLogAnalyzer: LogAnalyzer
+    {
+        public IExtensionManager Manager;
+
+        public TestableLogAnalyzer(IExtensionManager extensionManager)
+        {
+            Manager = extensionManager;
+        }
+
+        protected override IExtensionManager GetManager()
+        {
+            return Manager;
+        }
+
+    }
+
+
+
 
 }
