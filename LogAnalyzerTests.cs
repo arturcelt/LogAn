@@ -10,15 +10,14 @@ namespace LogAn.UnitTests
     public class LogAnalyzerTests
     {
         [Test]
-        public void overriderTest()
+        public void overrideTestWithoutStub()
         {
-            FakeExtensionManager stub = new FakeExtensionManager();
-            stub.WillBeValid = true;
-            TestableLogAnalyzer logan = new TestableLogAnalyzer(stub);
+            TestableLogAnalyzer logan = new TestableLogAnalyzer();
+            logan.IsSupported = true;
 
-            bool result = logan.IsValidLogFileName("file.ext");
+            bool result = logan.IsValidLogFileName("test.ext");
 
-            Assert.True(result);
+            Assert.True(result, "...");
         }
 
         
@@ -26,28 +25,14 @@ namespace LogAn.UnitTests
       
     }
 
-    internal class FakeExtensionManager : IExtensionManager
-    {
-        public bool WillBeValid = false;
-
-        public bool IsValid(string fileName)
-        {
-            return WillBeValid;
-        }
-    }
-
+    
     class TestableLogAnalyzer: LogAnalyzer
     {
-        public IExtensionManager Manager;
+        public bool IsSupported;
 
-        public TestableLogAnalyzer(IExtensionManager extensionManager)
+        protected override bool IsValid(string fileName)
         {
-            Manager = extensionManager;
-        }
-
-        protected override IExtensionManager GetManager()
-        {
-            return Manager;
+            return IsSupported;
         }
 
     }
