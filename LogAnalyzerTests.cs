@@ -9,6 +9,7 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class LogAnalyzerTests
     {
+#if DEBUG
         [Test]
         public void overrideTestWithoutStub()
         {
@@ -19,15 +20,17 @@ namespace LogAn.UnitTests
 
             Assert.True(result, "...");
         }
+#endif
 
-        
 
-      
+
+
     }
 
     
     class TestableLogAnalyzer: LogAnalyzer
     {
+       
         public bool IsSupported;
 
         protected override bool IsValid(string fileName)
