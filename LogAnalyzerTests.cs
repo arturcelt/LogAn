@@ -9,18 +9,18 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class LogAnalyzerTests
     {
-#if DEBUG
         [Test]
-        public void overrideTestWithoutStub()
+        public void Analyze_TooShortFileName_CallsWebService()
         {
-            TestableLogAnalyzer logan = new TestableLogAnalyzer();
-            logan.IsSupported = true;
+            FakeWebService mockService = new FakeWebService();
+            LogAnalyzer log = new LogAnalyzer(mockService);
+            string toShortFileName = "abc.ext";
 
-            bool result = logan.IsValidLogFileName("test.ext");
+            log.Analyze(toShortFileName);
 
-            Assert.True(result, "...");
+            StringAssert.Contains("Nazwa pliku jest zbyt krótka:abc.ext", mockService.LastError);
+            
         }
-#endif
 
 
 
@@ -28,18 +28,7 @@ namespace LogAn.UnitTests
     }
 
     
-    class TestableLogAnalyzer: LogAnalyzer
-    {
-       
-        public bool IsSupported;
-
-        protected override bool IsValid(string fileName)
-        {
-            return IsSupported;
-        }
-
-    }
-
+    
 
 
 
