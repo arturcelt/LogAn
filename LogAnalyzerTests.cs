@@ -12,14 +12,15 @@ namespace LogAn.UnitTests
         [Test]
         public void Analyze_ToShortFileName_CallLogger()
         {
-            FakeLogger logger = new FakeLogger();
-
+            ILogger logger = Substitute.For<ILogger>();
             LogAnalyzer analyzer = new LogAnalyzer(logger);
 
             analyzer.MinNameLength = 6;
             analyzer.Analyze("a.txt");
 
-            StringAssert.Contains("za krótka", logger.LastError);
+            logger.Received().LogError("Nazwa pliku jest za krótka: a.txt");
+
+
         }
     }
 }
