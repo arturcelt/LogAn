@@ -2,32 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using NSubstitute;
 
 namespace LogAn.UnitTests
 {
     [TestFixture]
     public class LogAnalyzer2Tests
     {
-    
-
         [Test]
         public void Analyze_LoggerThrows_CallsWebService()
         {
-            FakeWebService mockWebServcie = new FakeWebService();
+            var mockWebService = Substitute.For<IWebService>();
+            var stubLogger = Substitute.For<ILogger>();
+            stubLogger.When(logger => logger.LogError(Arg.Any<string>())).Do(info => { throw new Exception("sztuczny wyjątek"); });
 
-            FakeLogger2 stubLogger = new FakeLogger2();
-            stubLogger.WillThrow = new Exception("sztuczny wyjątek");
+            var analyzer = new LogAnalyzer2(stubLogger, mockWebService);
+            analyzer.MinNameLenght = 10;
+            analyzer.Analyze("short.txt");
 
-            var analyzer2 = new LogAnalyzer2(stubLogger, mockWebServcie);
-
-            analyzer2.MinNameLenght = 8;
-
-            string toShortFileName = "abc.ext";
-            analyzer2.Analyze(toShortFileName);
-
-            StringAssert.Contains("Błąd z rejestratora: sztuczny wyjątek", mockWebServcie.MessageToWebService);
-
-
+            mockWebService.Received().Write(Arg.Is<string>(s => s.Contains("sztuczny wyjątek")));
         }
     }
 }
