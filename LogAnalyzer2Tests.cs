@@ -8,21 +8,28 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class LogAnalyzer2Tests
     {
+    
+
         [Test]
-        public void Analyze_WebServiceThrows_SendsEmail()
+        public void Analyze_LoggerThrows_CallsWebService()
         {
-            FakeWebService stubService = new FakeWebService();
-            stubService.ToThrow = new Exception("Sztuczny wyjątek");
-            FakeEmailService mockEmail = new FakeEmailService();
+            FakeWebService mockWebServcie = new FakeWebService();
 
-            LogAnalyzer2 log = new LogAnalyzer2(stubService, mockEmail);
+            FakeLogger2 stubLogger = new FakeLogger2();
+            stubLogger.WillThrow = new Exception("sztuczny wyjątek");
+
+            var analyzer2 = new LogAnalyzer2(stubLogger, mockWebServcie);
+
+            analyzer2.MinNameLenght = 8;
+
             string toShortFileName = "abc.ext";
-            log.Analyze(toShortFileName);
+            analyzer2.Analyze(toShortFileName);
 
-            StringAssert.Contains("someone@somewhere.com", mockEmail.To);
-            StringAssert.Contains("Sztuczny wyjątek", mockEmail.Body);
-            StringAssert.Contains("Brak możliwości rejestracji", mockEmail.Subject);
+            StringAssert.Contains("Błąd z rejestratora: sztuczny wyjątek", mockWebServcie.MessageToWebService);
+
 
         }
     }
 }
+
+
