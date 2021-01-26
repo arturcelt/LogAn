@@ -20,7 +20,7 @@ namespace LogAn.UnitTests
             analyzer.MinNameLenght = 10;
             analyzer.Analyze("short.txt");
 
-            mockWebService.Received().Write(Arg.Is<string>(s => s.Contains("sztuczny wyjątek")));
+            mockWebService.Received().Write(Arg.Is<ErrorInfo>(s => s.Message.Contains("sztuczny wyjątek")));
         }
     }
 }

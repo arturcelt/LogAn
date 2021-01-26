@@ -8,9 +8,9 @@ namespace LogAn.UnitTests
     {
         public string MessageToWebService;
 
-        public void Write(string message)
+        public void Write(ErrorInfo errorInfo)
         {
-            MessageToWebService = message;
+            MessageToWebService = errorInfo.Message;
         }
 
         
