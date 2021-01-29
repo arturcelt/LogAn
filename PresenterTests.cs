@@ -20,7 +20,8 @@ namespace LogAn.UnitTests
             stubView.ErrorOccured += Raise.Event<Action<string>>("sztuczny błąd");
 
             mockLogger.Received().LogError(Arg.Is<string>(s => s.Contains("sztuczny błąd")));
-
         }
+
+       
     }
 }
