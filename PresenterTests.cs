@@ -9,15 +9,18 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class PresenterTests
     {
+        
         [Test]
-        public void ctor_WhenViewIsLoaded_CallsViewRender()
+        public void ctor_WhenViewHasError_CallsLogger()
         {
-            var mockView = Substitute.For<IView>();
+            var stubView = Substitute.For<IView>();
+            var mockLogger = Substitute.For<ILogger>();
 
-            Presenter p = new Presenter(mockView);
-            mockView.Loaded += Raise.Event<Action>();
+            Presenter p = new Presenter(stubView, mockLogger);
+            stubView.ErrorOccured += Raise.Event<Action<string>>("sztuczny błąd");
 
-            mockView.Received().Render(Arg.Is<string>(s => s.Contains("Witaj świecie")));
+            mockLogger.Received().LogError(Arg.Is<string>(s => s.Contains("sztuczny błąd")));
+
         }
     }
 }
